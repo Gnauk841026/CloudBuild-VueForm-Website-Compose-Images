@@ -26,13 +26,13 @@ steps:
     - 'deploy'
     - 'releases'
     - 'create'
-    - 'release-${_SHORT_SHA}'
+    - 'release-${_SHORT_SHA:-default}'
     - '--delivery-pipeline=demo-pipeline'
     - '--region=asia-east1'
     - '--annotations=commitId=${_REVISION_ID}'
     - '--source=.' 
     - '--skaffold-file=./app-config/skaffold.yaml'
-    - '--images=hello-js=asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp:${_SHORT_SHA}'
+    - '--images=my-service=gcr.io/terraform-429505/mynewapp:${_SHORT_SHA:-latest}'
 
 
   # Deploy to test environment
