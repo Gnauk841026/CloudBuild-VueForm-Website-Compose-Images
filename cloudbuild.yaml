@@ -1,23 +1,23 @@
 steps:
-  # Build the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp', '.']
+  # # Build the Docker image
+  # - name: 'gcr.io/cloud-builders/docker'
+  #   args: ['build', '-t', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp', '.']
 
-  # Push the image to the Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp']
+  # # Push the image to the Container Registry
+  # - name: 'gcr.io/cloud-builders/docker'
+  #   args: ['push', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp']
 
-  # Apply the delivery pipeline and target configurations
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    dir: 'clouddeploy-config'
-    args:
-    - bash
-    - -c
-    - |
-      gcloud deploy apply --file=delivery-pipeline.yaml --region=asia-east1
-      gcloud deploy apply --file=target-test.yaml --region=asia-east1
-      gcloud deploy apply --file=target-staging.yaml --region=asia-east1
-      gcloud deploy apply --file=target-prod.yaml --region=asia-east1
+  # # Apply the delivery pipeline and target configurations
+  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  #   dir: 'clouddeploy-config'
+  #   args:
+  #   - bash
+  #   - -c
+  #   - |
+  #     gcloud deploy apply --file=delivery-pipeline.yaml --region=asia-east1
+  #     gcloud deploy apply --file=target-test.yaml --region=asia-east1
+  #     gcloud deploy apply --file=target-staging.yaml --region=asia-east1
+  #     gcloud deploy apply --file=target-prod.yaml --region=asia-east1
 
   # Create a release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
