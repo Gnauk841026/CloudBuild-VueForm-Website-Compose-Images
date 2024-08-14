@@ -13,7 +13,7 @@ spec:
       serviceAccountName: cd-tut-run-sa@terraform-429505.iam.gserviceaccount.com
       containers:
       - name: mynewapp
-        image: gcr.io/terraform-429505/mynewapp
+        image: asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp
         env:
           - name: NAME
             value: "Test"

@@ -1,11 +1,11 @@
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/terraform-429505/mynewapp:${_COMMIT_SHA}', '.']
+    args: ['build', '-t', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp:${_COMMIT_SHA}', '.']
 
   # Push the image to the Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/terraform-429505/mynewapp:${_COMMIT_SHA}']
+    args: ['push', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp:${_COMMIT_SHA}']
 
   # Apply the delivery pipeline and target configurations
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -32,7 +32,7 @@ steps:
     - '--annotations=commitId=${_REVISION_ID}'
     - '--source=.' 
     - '--skaffold-file=./app-config/skaffold.yaml'
-    - '--images=my-service=gcr.io/terraform-429505/mynewapp:${_SHORT_SHA}'
+    - '--images=hello-js=asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp:${_SHORT_SHA}'
 
 
   # Deploy to test environment
