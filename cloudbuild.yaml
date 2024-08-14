@@ -34,6 +34,7 @@ steps:
     - '--skaffold-file=./app-config/skaffold.yaml'
     - '--images=my-service=gcr.io/terraform-429505/mynewapp:${_SHORT_SHA}'
 
+
   # Deploy to test environment
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
