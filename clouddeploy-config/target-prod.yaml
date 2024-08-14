@@ -1,0 +1,13 @@
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+  name: prod-cloudrun
+description: Production target
+requireApproval: true
+run:
+  location: projects/terraform-429505/locations/asia-east1
+executionConfigs:
+- usages:
+  - RENDER
+  - DEPLOY
+  serviceAccount: cd-tut-run-deploy-sa@terraform-429505.iam.gserviceaccount.com

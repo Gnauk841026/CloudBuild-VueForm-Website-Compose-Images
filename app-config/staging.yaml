@@ -1,0 +1,19 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: mynewapp-staging
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "1"
+    spec:
+      serviceAccountName: cd-tut-run-sa@terraform-429505.iam.gserviceaccount.com
+      containers:
+      - name: mynewapp
+        image: gcr.io/terraform-429505/mynewapp
+        env:
+          - name: NAME
+            value: "Staging"

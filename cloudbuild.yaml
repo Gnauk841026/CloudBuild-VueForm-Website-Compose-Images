@@ -1,0 +1,69 @@
+steps:
+# Build the combined Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/terraform-429505/mynewapp:$COMMIT_SHA', '.']
+
+# Push the image to the Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/terraform-429505/mynewapp:$COMMIT_SHA']
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  dir: 'clouddeploy-config'
+  args:
+  - bash
+  - -c
+  - |
+    gcloud deploy apply --file=delivery-pipeline.yaml --region=asia-east1
+    gcloud deploy apply --file=target-test.yaml --region=asia-east1
+    gcloud deploy apply --file=target-staging.yaml --region=asia-east1
+    gcloud deploy apply --file=target-prod.yaml --region=asia-east1
+    
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'deploy'
+  - 'releases'
+  - 'create'
+  - 'release-${SHORT_SHA}'
+  - '--delivery-pipeline=demo-pipeline'
+  - '--region=asia-east1'
+  - '--annotations=commitId=${REVISION_ID}'
+  - '--source=.' 
+  - '--skaffold-file=./app-config/skaffold.yaml'
+  - '--images=gcr.io/terraform-429505/mynewapp:${SHORT_SHA}'
+
+# 部署到測試環境
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'deploy'
+  - 'releases'
+  - 'promote'
+  - '--release=release-${SHORT_SHA}'
+  - '--delivery-pipeline=demo-pipeline'
+  - '--region=asia-east1'
+  - '--to-target=test-cloudrun'
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'deploy'
+  - 'releases'
+  - 'promote'
+  - '--release=release-${SHORT_SHA}'
+  - '--delivery-pipeline=demo-pipeline'
+  - '--region=asia-east1'
+  - '--to-target=staging-cloudrun'
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'deploy'
+  - 'releases'
+  - 'promote'
+  - '--release=release-${SHORT_SHA}'
+  - '--delivery-pipeline=demo-pipeline'
+  - '--region=asia-east1'
+  - '--to-target=prod-cloudrun'
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
