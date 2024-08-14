@@ -1,11 +1,11 @@
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp:${_COMMIT_SHA}', '.']
+    args: ['build', '-t', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp', '.']
 
   # Push the image to the Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp:${_COMMIT_SHA}']
+    args: ['push', 'asia-east1-docker.pkg.dev/terraform-429505/my-registry/mynewapp']
 
   # Apply the delivery pipeline and target configurations
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
